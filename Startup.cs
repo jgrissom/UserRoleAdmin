@@ -29,6 +29,7 @@ namespace UserRoleAdmin
             services.AddDbContext<AppIdentityDbContext>(options => options.UseSqlServer(Configuration["Data:AppIdentity:ConnectionString"]));
             services.AddIdentity<AppUser, IdentityRole>(opts =>
             {
+                opts.User.RequireUniqueEmail = true;
                 opts.Password.RequiredLength = 6;
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequireLowercase = false;
