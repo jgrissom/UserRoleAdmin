@@ -15,6 +15,7 @@
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
+                <td style="border-top-style:hidden;border-right-style:hidden;border-bottom-style:hidden;"></td>
             </tr>
         </thead>
             @foreach (AppUser user in Model)
@@ -23,6 +24,12 @@
                     <td>@user.Id</td>
                     <td>@user.UserName</td>
                     <td>@user.Email</td>
+                    <td style="border-top-style:hidden;border-right-style:hidden;border-bottom-style:hidden;">
+                        <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             }
     </table>
