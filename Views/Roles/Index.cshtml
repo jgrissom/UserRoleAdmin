@@ -1,5 +1,6 @@
 @using Microsoft.AspNetCore.Identity
 @model IEnumerable<IdentityRole>
+@addTagHelper UserRoleAdmin.TagHelpers.*, UserRoleAdmin
 @{
     ViewData["Title"] = "Roles";
 }
@@ -17,6 +18,7 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
+                <th scope="col">Users</th>
                 <td style="border-top-style:hidden;border-right-style:hidden;border-bottom-style:hidden;"></td>
             </tr>
         </thead>
@@ -25,6 +27,7 @@
             <tr>
                 <td>@role.Id</td>
                 <td>@role.Name</td>
+                <td identity-role="@role.Id"></td>
                 <td style="border-top-style:hidden;border-right-style:hidden;border-bottom-style:hidden;">
                     <form asp-action="Delete" asp-route-id="@role.Id" method="post">
                         <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@role.Id">Edit</a>
