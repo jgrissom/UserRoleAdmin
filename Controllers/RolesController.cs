@@ -2,15 +2,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using UserRoleAdmin.Models;
 
 namespace UserRoleAdmin.Controllers
 {
     public class RolesController : Controller
     {
         private RoleManager<IdentityRole> roleManager;
-        public RolesController(RoleManager<IdentityRole> roleMgr)
+        private UserManager<AppUser> userManager;
+        public RolesController(RoleManager<IdentityRole> roleMgr, UserManager<AppUser> userMgr)
         {
             roleManager = roleMgr;
+            userManager = userMgr;
         }
 
         public IActionResult Index() => View(roleManager.Roles);
@@ -55,6 +60,24 @@ namespace UserRoleAdmin.Controllers
                 ModelState.AddModelError("", "No role found");
             }
             return View("Index", roleManager.Roles);
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            IdentityRole role = await roleManager.FindByIdAsync(id);
+            List<AppUser> members = new List<AppUser>();
+            List<AppUser> nonMembers = new List<AppUser>();
+            foreach (AppUser user in userManager.Users.ToList())
+            {
+                var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+                list.Add(user);
+            }
+            return View(new RoleEditModel
+            {
+                Role = role,
+                Members = members,
+                NonMembers = nonMembers
+            });
         }
 
         private void AddErrorsFromResult(IdentityResult result)
